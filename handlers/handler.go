@@ -101,15 +101,12 @@ func GetoneCourse(courseId string) primitive.M {
 	}
 	filterOneCourse := bson.M{"_id": id}
 
-	oneCourseCur, err := collection.Find(context.TODO(), filterOneCourse, nil)
-	if err != nil {
-		log.Fatal(err)
-	}
+	oneCourseCur := collection.FindOne(context.TODO(), filterOneCourse)
 	var course primitive.M
 	err = oneCourseCur.Decode(&course)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer oneCourseCur.Close(context.Background())
+
 	return course
 }

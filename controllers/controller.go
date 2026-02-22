@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	
+
 	"github.com/gorilla/mux"
 )
 
@@ -70,7 +70,7 @@ func InsertACourse(w http.ResponseWriter, r *http.Request) {
 func UpdateACourse(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r)
-	if err := json.NewEncoder(w).Encode(handler.UpdateoneCourse(params["id"])); err != nil {
+	if err := json.NewEncoder(w).Encode(handler.UpdateoneCourse(params["id"], r)); err != nil {
 		log.Fatal(err)
 	}
 

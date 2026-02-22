@@ -4,6 +4,8 @@ import (
 	"context"
 	"databaseserverintegration/database"
 	"databaseserverintegration/models"
+	"encoding/json"
+	"net/http"
 
 	"fmt"
 	"log"
@@ -28,13 +30,17 @@ func InsertoneCourse(course models.Course) primitive.ObjectID {
 }
 
 // update one course
-func UpdateoneCourse(courseId string) int64 {
+func UpdateoneCourse(courseId string, r *http.Request) int64 {
 	id, err := primitive.ObjectIDFromHex(courseId)
 	if err != nil {
 		log.Fatal(err)
 	}
+	var updatecourse models.Course
+	if err = json.NewDecoder(r.Body).Decode(&updatecourse); err != nil {
+		log.Fatal(err)
+	}
 	filter := bson.M{"_id": id}
-	update := bson.M{"$set": bson.M{"watched": true, "completed": true}}
+	update := bson.M{"$set": bson.M{"watched": updatecourse.Watched, "completed": updatecourse.Completed}}
 	result, err := collection.UpdateOne(context.TODO(), filter, update)
 	if err != nil {
 		log.Fatal(err)
